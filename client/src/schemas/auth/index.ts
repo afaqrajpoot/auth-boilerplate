@@ -1,4 +1,4 @@
-import { GlobalApiResponse } from "@/types";
+import { GlobalApiResponse, UserModel } from "@/types";
 import { z } from "zod";
 
 const passwordSchema = z
@@ -20,11 +20,7 @@ export const postLoginReqSchema = z.object({
 });
 
 export type postLoginReqType = z.infer<typeof postLoginReqSchema>;
-export type postLoginResType = GlobalApiResponse<{
-  token: string;
-  expires: number;
-  expiresPrettyPrint: string;
-}>;
+export type postLoginResType = GlobalApiResponse<UserModel>;
 
 // -- SIGNUP
 export const postRegisterReqSchema = z.object({
@@ -34,8 +30,4 @@ export const postRegisterReqSchema = z.object({
 });
 
 export type postRegisterReqType = z.infer<typeof postRegisterReqSchema>;
-export type postRegisterResType = GlobalApiResponse<{
-  token: string;
-  expires: number;
-  expiresPrettyPrint: string;
-}>;
+export type postRegisterResType = GlobalApiResponse<UserModel>;

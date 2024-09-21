@@ -19,6 +19,16 @@ export type GlobalErrorResType = {
         }>;
   };
 };
+export type UserModel = {
+  email: string;
+  name: string;
+  roles: string[];
+  _id: string;
+  date: string;
+  token: string;
+  expires: number;
+  expiresPrettyPrint: string;
+};
 
 export type METHODS = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 

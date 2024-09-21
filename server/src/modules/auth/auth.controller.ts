@@ -4,6 +4,10 @@ import { AuthService, ITokenReturnBody } from "./auth.service";
 import { LoginPayload } from "./payload/login.payload";
 import { RegisterPayload } from "./payload/register.payload";
 import { ProfileService } from "../profile/profile.service";
+import { IProfile } from "modules/profile/profile.model";
+import { Model } from "mongoose";
+
+export interface IAuthResponse extends IProfile, ITokenReturnBody {}
 /**
  * Authentication Controller
  */
@@ -28,9 +32,15 @@ export class AuthController {
   @ApiResponse({ status: 201, description: "Login Completed" })
   @ApiResponse({ status: 400, description: "Bad Request" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
-  async login(@Body() payload: LoginPayload): Promise<ITokenReturnBody> {
+  async login(@Body() payload: LoginPayload): Promise<IAuthResponse> {
     const user = await this.authService.validateUser(payload);
-    return await this.authService.createToken(user);
+    const token = await this.authService.createToken(user);
+    const formattedUser = user.toJSON();
+
+    return {
+      ...formattedUser,
+      ...token,
+    } as IAuthResponse;
   }
 
   /**
@@ -41,13 +51,13 @@ export class AuthController {
   @ApiResponse({ status: 201, description: "Registration Completed" })
   @ApiResponse({ status: 400, description: "Bad Request" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
-  async register(@Body() payload: RegisterPayload): Promise<ITokenReturnBody> {
+  async register(@Body() payload: RegisterPayload): Promise<IAuthResponse> {
     const user = await this.profileService.create(payload);
     const token = await this.authService.createToken(user);
     const formattedUser = user.toJSON();
     return {
       ...formattedUser,
       ...token,
-    };
+    } as IAuthResponse;
   }
 }

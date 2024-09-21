@@ -20,7 +20,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const { logout } = useAuthContext();
+  const { logout, userInfo } = useAuthContext();
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
@@ -69,16 +69,20 @@ export function Header() {
                   className="relative h-8 w-8 rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>SC</AvatarFallback>
+                    <AvatarFallback>
+                      {userInfo?.name.slice(0, 2)}
+                    </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">shadcn</p>
+                    <p className="text-sm font-medium leading-none">
+                      {userInfo?.name}
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      m@example.com
+                      {userInfo?.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>
