@@ -1,7 +1,11 @@
 "use client";
 
 import { localStorageClient } from "@/config/localstorage-client";
-import { postLoginReqType, postLoginResType } from "@/schemas/auth";
+import {
+  postLoginReqType,
+  postLoginResType,
+  postRegisterReqType,
+} from "@/schemas/auth";
 import { apiRouter } from "@/utils/api-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -9,12 +13,12 @@ const AuthContext = createContext<{
   isLoggedIn: boolean;
   userInfo?: postLoginResType["data"];
   login: (payload: postLoginReqType) => Promise<boolean>;
-  // register: (payload: postRegisterReqType) => Promise<boolean>;
+  register: (payload: postRegisterReqType) => Promise<boolean>;
   logout: VoidFunction;
 }>({
   isLoggedIn: false,
   login: async () => false,
-  // register: async () => false,
+  register: async () => false,
   logout: () => {},
 });
 
@@ -30,7 +34,7 @@ const AuthProvider: React.FC<{
   >();
 
   const login = async (payload: postLoginReqType) => {
-    // express login
+    // nest login
     const response = await apiRouter(
       "LOGIN",
       {
@@ -63,36 +67,36 @@ const AuthProvider: React.FC<{
     return true;
   };
 
-  // const register = async (payload: postRegisterReqType) => {
-  //   // express login
-  //   const response = await apiRouter(
-  //     "REGISTER",
-  //     {
-  //       method: "POST",
-  //       body: JSON.stringify(payload),
-  //     },
-  //     {
-  //       skipAuthorization: true,
-  //     }
-  //   );
+  const register = async (payload: postRegisterReqType) => {
+    // nest register
+    const response = await apiRouter(
+      "REGISTER",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      {
+        skipAuthorization: true,
+      }
+    );
 
-  //   if (!response.ok) {
-  //     return false;
-  //   }
+    if (!response.ok) {
+      return false;
+    }
 
-  //   const responsePayload = await response.json();
-  //   if (!responsePayload.success) {
-  //     return false;
-  //   }
+    const responsePayload = await response.json();
+    if (!responsePayload.success) {
+      return false;
+    }
 
-  //   setIsLoggedIn(true);
-  //   setUserInfo(responsePayload.data.result);
+    setIsLoggedIn(true);
+    setUserInfo(responsePayload.data);
 
-  //   lsClient.setItem("IS_LOGGED_IN", true);
-  //   lsClient.setItem("USER_INFO", responsePayload.data.result);
+    lsClient.setItem("IS_LOGGED_IN", true);
+    lsClient.setItem("USER_INFO", responsePayload.data);
 
-  //   return true;
-  // };
+    return true;
+  };
 
   const logout = async () => {
     lsClient.cleanStorage();
@@ -104,7 +108,6 @@ const AuthProvider: React.FC<{
   useEffect(() => {
     const userInfo = lsClient.getItem("USER_INFO");
     const isLoggedIn = lsClient.getItem("IS_LOGGED_IN");
-
     if (!!isLoggedIn && !!userInfo) {
       setIsLoggedIn(true);
       setUserInfo(userInfo);
@@ -114,7 +117,9 @@ const AuthProvider: React.FC<{
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, userInfo }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, userInfo, register }}
+    >
       {children}
     </AuthContext.Provider>
   );

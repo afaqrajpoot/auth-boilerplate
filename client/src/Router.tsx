@@ -3,12 +3,14 @@ import { createBrowserRouter } from "react-router-dom";
 import NoMatch from "@/pages/NoMatch";
 import Dashboard from "@/pages/Dashboard";
 import { ProtectedLayout } from "@/components/layouts/AuthLayout";
-import { LoginPage } from "./pages";
+import { LoginPage, RegisterPage } from "./pages";
+import { PAGE_ROUTES } from "./constants/API_ROUTES";
+import { PublicLayout } from "./components/layouts/PublicLayout";
 
 export const router = createBrowserRouter(
   [
     {
-      path: "/",
+      path: PAGE_ROUTES.HOME,
       element: <ProtectedLayout />,
       children: [
         {
@@ -18,15 +20,15 @@ export const router = createBrowserRouter(
       ],
     },
     {
-      path: "/auth",
+      element: <PublicLayout />,
       children: [
         {
-          path: "/auth/login",
+          path: PAGE_ROUTES.AUTH.LOGIN,
           element: <LoginPage />,
         },
         {
-          path: "/auth/sign-up",
-          element: <Dashboard />,
+          path: PAGE_ROUTES.AUTH.REGISTER,
+          element: <RegisterPage />,
         },
       ],
     },

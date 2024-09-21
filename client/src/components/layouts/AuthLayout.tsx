@@ -2,6 +2,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { PAGE_ROUTES } from "@/constants/API_ROUTES";
 
 export const ProtectedLayout = () => {
   const { userInfo } = useAuthContext();
@@ -9,7 +10,7 @@ export const ProtectedLayout = () => {
   // Check if the user is authenticated
   if (!userInfo?.token) {
     // If not authenticated, redirect to the login page
-    return <Navigate to="/auth/login" />;
+    return <Navigate to={PAGE_ROUTES.AUTH.LOGIN} />;
   }
 
   // If authenticated, render the child routes

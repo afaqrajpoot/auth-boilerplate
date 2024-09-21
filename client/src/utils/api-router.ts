@@ -1,7 +1,6 @@
-// import { postRegisterResType } from "@/app/api/auth/register/validators";
 import { localStorageClient } from "@/config/localstorage-client";
 import { API_ROUTES } from "@/constants/API_ROUTES";
-import { postLoginResType } from "@/schemas/auth";
+import { postLoginResType, postRegisterResType } from "@/schemas/auth";
 
 export const apiRouter = async <T extends keyof typeof API_TYPE_MAPPER>(
   _input: T,
@@ -68,8 +67,7 @@ export const apiRouter = async <T extends keyof typeof API_TYPE_MAPPER>(
 
 const API_MAPPER = {
   LOGIN: {} as postLoginResType,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  REGISTER: {} as any,
+  REGISTER: {} as postRegisterResType,
 } as const;
 
 // Utility type to check for missing keys
