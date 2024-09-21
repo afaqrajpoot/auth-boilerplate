@@ -24,7 +24,6 @@
 /*/dist
 
 # tests
-/*/test
 /*/coverage
 /*/.nyc_output
 /*/build/config\.gypi
