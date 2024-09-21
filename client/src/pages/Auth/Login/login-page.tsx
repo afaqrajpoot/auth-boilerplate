@@ -1,5 +1,3 @@
-"use client";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,35 +5,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  Button,
+  Label,
+  Input,
+  PasswordInput,
+} from "@/components";
 import { LoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PAGE_ROUTES } from "@/constants/API_ROUTES";
 import { useState } from "react";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { postRegisterReqSchema, postRegisterReqType } from "@/schemas/auth";
+import { postLoginReqSchema, postLoginReqType } from "@/schemas";
+import { useAuthContext } from "@/contexts";
 import { Link, Navigate } from "react-router-dom";
-import { PasswordInput } from "@/components/ui";
+import { PAGE_ROUTES } from "@/constants";
 
-const defaultValues: postRegisterReqType = {
+const defaultValues: postLoginReqType = {
   email: "",
-  name: "",
   password: "",
 };
 
-export default function RegisterPage() {
-  const { register: handleRegister } = useAuthContext();
+export default function LoginPage() {
+  const { login } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("Something went wrong!");
 
-  const methods = useForm<postRegisterReqType>({
+  const methods = useForm<postLoginReqType>({
     defaultValues,
-    resolver: zodResolver(postRegisterReqSchema),
+    resolver: zodResolver(postLoginReqSchema),
     delayError: 500,
   });
 
@@ -45,22 +42,18 @@ export default function RegisterPage() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = (values: postRegisterReqType) => {
+  const onSubmit = (values: postLoginReqType) => {
     setIsLoading(true);
-    handleRegister(values)
+    login(values)
       .then((res) => {
         if (!res) {
           setIsError(true);
-          setIsLoading(false);
-          setErrorMessage("Unable to register. Please try again.");
           return;
         }
-        <Navigate to={PAGE_ROUTES.AUTH.LOGIN} />;
+        <Navigate to={PAGE_ROUTES.HOME} />;
       })
-      .catch(() => {
-        setIsError(true);
-        setIsLoading(false);
-      });
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -69,30 +62,17 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card className="w-full max-w-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">Register</CardTitle>
+            <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your email below to register your account. <br />
+              Enter your email below to login to your account. <br />
               {isError && (
-                <span className="text-red-500 text-sm">{errorMessage}</span>
+                <span className="text-red-500 text-sm">
+                  {"Incorrect email or password"}
+                </span>
               )}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                {...register("name")}
-                id="name"
-                type="name"
-                placeholder="Full name"
-              />
-
-              {errors.name && (
-                <span className="text-red-500 text-sm">
-                  {errors.name.message}
-                </span>
-              )}
-            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -117,19 +97,18 @@ export default function RegisterPage() {
               )}
             </div>
           </CardContent>
-
           <CardFooter>
             <div className="w-full">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <LoaderCircle className="animate-spin" />}
 
-                <span className="ml-2">Sign up</span>
+                <span className="ml-2">Sign in</span>
               </Button>
 
               <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <Link to={PAGE_ROUTES.AUTH.LOGIN} className="underline">
-                  Login
+                Don{"'"}t have an account?{" "}
+                <Link to={PAGE_ROUTES.AUTH.REGISTER} className="underline">
+                  Register
                 </Link>
               </div>
             </div>

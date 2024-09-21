@@ -1,5 +1,5 @@
 import { localStorageClient } from "@/config/localstorage-client";
-import { API_ROUTES } from "@/constants/API_ROUTES";
+import { API_ROUTES } from "@/constants/api-routes";
 import { postLoginResType, postRegisterResType } from "@/schemas/auth";
 
 export const apiRouter = async <T extends keyof typeof API_TYPE_MAPPER>(

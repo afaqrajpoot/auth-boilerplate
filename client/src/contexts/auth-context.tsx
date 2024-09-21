@@ -1,13 +1,13 @@
 "use client";
 
-import { localStorageClient } from "@/config/localstorage-client";
-import { ENV } from "@/constants/ENV";
+import { localStorageClient } from "@/config";
+import { ENV } from "@/constants";
 import {
   postLoginReqType,
   postLoginResType,
   postRegisterReqType,
-} from "@/schemas/auth";
-import { apiRouter } from "@/utils/api-router";
+} from "@/schemas";
+import { apiRouter } from "@/utils";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<{

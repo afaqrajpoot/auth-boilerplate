@@ -1,5 +1,10 @@
-import { PageHeader, PageHeaderHeading } from "@/components/page-header";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  PageHeader,
+  PageHeaderHeading,
+  Card,
+  CardHeader,
+  CardTitle,
+} from "@/components";
 
 export default function Dashboard() {
   return (

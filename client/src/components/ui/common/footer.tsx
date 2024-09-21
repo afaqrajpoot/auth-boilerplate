@@ -1,5 +1,5 @@
-import { appConfig } from "@/config/app";
-import { ModeToggle } from "../mode-toggle";
+import { ModeToggle } from "@/components";
+import { appConfig } from "@/config";
 
 export function Footer() {
   return (

@@ -1,4 +1,4 @@
-import { ENV } from "./ENV";
+import { ENV } from "./static-env";
 
 export const API_ROUTES = {
   LOGIN: ENV.BACKEND_BASE_URL + "/api/auth/login",

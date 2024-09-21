@@ -1,7 +1,7 @@
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuthContext } from "@/contexts/auth-context";
 import { Navigate, Outlet } from "react-router-dom";
 
-import { PAGE_ROUTES } from "@/constants/API_ROUTES";
+import { PAGE_ROUTES } from "@/constants/api-routes";
 
 export const PublicLayout = () => {
   const { userInfo } = useAuthContext();

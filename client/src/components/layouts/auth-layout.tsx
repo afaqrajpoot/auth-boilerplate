@@ -1,8 +1,7 @@
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useAuthContext } from "@/contexts";
 import { Navigate, Outlet } from "react-router-dom";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
-import { PAGE_ROUTES } from "@/constants/API_ROUTES";
+import { PAGE_ROUTES } from "@/constants";
+import { Footer, Header } from "@/components";
 
 export const ProtectedLayout = () => {
   const { userInfo } = useAuthContext();

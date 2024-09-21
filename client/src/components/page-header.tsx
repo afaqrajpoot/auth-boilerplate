@@ -1,6 +1,6 @@
-import Balance from "react-wrap-balancer"
+import Balance from "react-wrap-balancer";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils";
 
 function PageHeader({
   className,
@@ -17,7 +17,7 @@ function PageHeader({
     >
       {children}
     </section>
-  )
+  );
 }
 
 function PageHeaderHeading({
@@ -26,13 +26,10 @@ function PageHeaderHeading({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h1
-      className={cn(
-        "text-3xl font-semibold tracking-tight my-1",
-        className
-      )}
+      className={cn("text-3xl font-semibold tracking-tight my-1", className)}
       {...props}
     />
-  )
+  );
 }
 
 function PageHeaderDescription({
@@ -47,7 +44,7 @@ function PageHeaderDescription({
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { PageHeader, PageHeaderHeading, PageHeaderDescription }
+export { PageHeader, PageHeaderHeading, PageHeaderDescription };

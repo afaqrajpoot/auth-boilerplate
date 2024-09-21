@@ -1,4 +1,4 @@
-import { postLoginResType } from "@/schemas/auth";
+import { postLoginResType } from "@/schemas";
 import { isStringified } from "@/utils";
 
 const STORAGE_MAPPER = {

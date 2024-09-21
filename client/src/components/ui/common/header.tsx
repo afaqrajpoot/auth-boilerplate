@@ -1,22 +1,26 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Icons } from "@/components/icons";
-import { appConfig } from "@/config/app";
-import { Button } from "@/components/ui/button";
 import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  Icons,
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+  Avatar,
+  AvatarFallback,
+} from "@/components";
+import { appConfig } from "@/config";
+
 import { ViewVerticalIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Logo } from "../logo";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { Logo } from "../../logo";
+import { useAuthContext } from "@/contexts";
 
 export function Header() {
   const [open, setOpen] = useState(false);
