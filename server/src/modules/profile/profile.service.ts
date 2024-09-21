@@ -57,7 +57,6 @@ export class ProfileService {
       })
       .exec();
   }
-
   /**
    * Fetches a profile from database by name
    * @param {string} name
@@ -68,15 +67,24 @@ export class ProfileService {
   }
 
   /**
+   * Fetches a profile from database by name
+   * @param {string} email
+   * @returns {Promise<IProfile>} queried profile data
+   */
+  getByEmail(email: string): Promise<IProfile> {
+    return this.profileModel.findOne({ email }).exec();
+  }
+
+  /**
    * Create a profile with RegisterPayload fields
    * @param {RegisterPayload} payload profile payload
    * @returns {Promise<IProfile>} created profile data
    */
   async create(payload: RegisterPayload): Promise<IProfile> {
-    const user = await this.getByName(payload.name);
+    const user = await this.getByEmail(payload.email);
     if (user) {
       throw new NotAcceptableException(
-        "The account with the provided name currently exists. Please choose another one.",
+        "The account with the provided email currently exists. Please choose another one.",
       );
     }
     // this will auto assign the admin role to each created user
@@ -95,14 +103,14 @@ export class ProfileService {
    * @returns {Promise<IProfile>} mutated profile data
    */
   async edit(payload: PatchProfilePayload): Promise<IProfile> {
-    const { name } = payload;
+    const { email } = payload;
     const updatedProfile = await this.profileModel.updateOne({ name }, payload);
     if (updatedProfile.modifiedCount !== 1) {
       throw new BadRequestException(
         "The profile with that name does not exist in the system. Please try another name.",
       );
     }
-    return this.getByName(name);
+    return this.getByEmail(email);
   }
 
   /**
