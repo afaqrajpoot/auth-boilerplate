@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { NavLink } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Icons } from "@/components/icons";
 import { appConfig } from "@/config/app";
@@ -14,14 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { mainMenu } from "@/config/menu";
-import { ChevronDownIcon, ViewVerticalIcon } from "@radix-ui/react-icons";
+import { ViewVerticalIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Logo } from "../logo";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
+  const { logout } = useAuthContext();
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
@@ -30,66 +29,6 @@ export function Header() {
           <NavLink to="/" className="mr-6 flex items-center space-x-2">
             <Logo />
           </NavLink>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-            {mainMenu.map((menu, index) =>
-              menu.items !== undefined ? (
-                <DropdownMenu key={index}>
-                  <DropdownMenuTrigger
-                    className={cn(
-                      "flex items-center py-1 focus:outline-none text-sm font-medium transition-colors hover:text-primary",
-                      menu.items
-                        .filter((subitem) => subitem.to !== undefined)
-                        .map((subitem) => subitem.to)
-                        .includes(location.pathname)
-                        ? "text-foreground"
-                        : "text-foreground/60"
-                    )}
-                  >
-                    {menu.title}
-                    <ChevronDownIcon className="ml-1 -mr-1 h-3 w-3 text-muted-foreground" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="w-48"
-                    align="start"
-                    forceMount
-                  >
-                    {menu.items.map((subitem, subindex) =>
-                      subitem.to !== undefined ? (
-                        <NavLink key={subindex} to={subitem.to}>
-                          <DropdownMenuItem
-                            className={cn("hover:cursor-pointer", {
-                              "bg-muted": subitem.to === location.pathname,
-                            })}
-                          >
-                            {subitem.title}
-                          </DropdownMenuItem>
-                        </NavLink>
-                      ) : subitem.label ? (
-                        <DropdownMenuLabel key={subindex}>
-                          {subitem.title}
-                        </DropdownMenuLabel>
-                      ) : (
-                        <DropdownMenuSeparator key={subindex} />
-                      )
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <NavLink
-                  key={index}
-                  to={menu.to ?? ""}
-                  className={({ isActive }) =>
-                    cn(
-                      "text-sm font-medium transition-colors hover:text-primary",
-                      isActive ? "text-foreground" : "text-foreground/60"
-                    )
-                  }
-                >
-                  {menu.title}
-                </NavLink>
-              )
-            )}
-          </nav>
         </div>
         {/* mobile */}
         <Sheet open={open} onOpenChange={setOpen}>
@@ -110,25 +49,7 @@ export function Header() {
             >
               <Logo />
             </NavLink>
-            <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-8 pl-8">
-              <div className="flex flex-col space-y-3">
-                {mainMenu.map((menu, index) => (
-                  <NavLink
-                    key={index}
-                    to={menu.to ?? ""}
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      cn(
-                        "py-1 text-sm font-medium transition-colors hover:text-primary",
-                        isActive ? "text-foreground" : "text-foreground/60"
-                      )
-                    }
-                  >
-                    {menu.title}
-                  </NavLink>
-                ))}
-              </div>
-            </ScrollArea>
+            <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-8 pl-8"></ScrollArea>
           </SheetContent>
         </Sheet>
         <a href="/" className="mr-6 flex items-center space-x-2 md:hidden">
@@ -162,7 +83,9 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                  Log out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </nav>

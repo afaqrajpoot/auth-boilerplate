@@ -47,7 +47,6 @@ export default function LoginPage() {
     setIsLoading(true);
     login(values)
       .then((res) => {
-        console.log(res);
         if (!res) {
           setIsError(true);
           return;

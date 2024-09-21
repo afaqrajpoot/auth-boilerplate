@@ -15,16 +15,14 @@ export const ProtectedLayout = () => {
 
   // If authenticated, render the child routes
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
       <div className="flex-grow flex flex-col">
         <div className="container px-4 md:px-8 flex-grow flex flex-col">
           <Outlet />
         </div>
       </div>
-      <div className="container bottom-0 px-4 md:px-8">
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 };

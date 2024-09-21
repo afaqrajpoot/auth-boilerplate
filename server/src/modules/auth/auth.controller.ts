@@ -4,7 +4,6 @@ import { AuthService, ITokenReturnBody } from "./auth.service";
 import { LoginPayload } from "./payload/login.payload";
 import { RegisterPayload } from "./payload/register.payload";
 import { ProfileService } from "../profile/profile.service";
-
 /**
  * Authentication Controller
  */
@@ -44,6 +43,11 @@ export class AuthController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   async register(@Body() payload: RegisterPayload): Promise<ITokenReturnBody> {
     const user = await this.profileService.create(payload);
-    return await this.authService.createToken(user);
+    const token = await this.authService.createToken(user);
+    const formattedUser = user.toJSON();
+    return {
+      ...formattedUser,
+      ...token,
+    };
   }
 }

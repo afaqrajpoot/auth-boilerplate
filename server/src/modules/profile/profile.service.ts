@@ -63,7 +63,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} queried profile data
    */
   getByName(name: string): Promise<IProfile> {
-    return this.profileModel.findOne({ name }, { password: 0 }).exec();
+    return this.profileModel.findOne({ name }).exec();
   }
 
   /**
@@ -72,7 +72,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} queried profile data
    */
   getByEmail(email: string): Promise<IProfile> {
-    return this.profileModel.findOne({ email }, { password: 0 }).exec();
+    return this.profileModel.findOne({ email }).exec();
   }
 
   /**
@@ -87,7 +87,7 @@ export class ProfileService {
         "The account with the provided email currently exists. Please choose another one.",
       );
     }
-    // this will auto assign the admin role to each created user
+    // this will auto assign the default role to each created user
     const createdProfile = new this.profileModel({
       ...payload,
       password: crypto.createHmac("sha256", payload.password).digest("hex"),

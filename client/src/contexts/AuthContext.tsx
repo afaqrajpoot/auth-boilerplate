@@ -1,6 +1,7 @@
 "use client";
 
 import { localStorageClient } from "@/config/localstorage-client";
+import { ENV } from "@/constants/ENV";
 import {
   postLoginReqType,
   postLoginResType,
@@ -32,6 +33,11 @@ const AuthProvider: React.FC<{
   const [userInfo, setUserInfo] = useState<
     postLoginResType["data"] | undefined
   >();
+  const autoLogout = (time: number) => {
+    setTimeout(() => {
+      logout();
+    }, time);
+  };
 
   const login = async (payload: postLoginReqType) => {
     // nest login
@@ -51,7 +57,6 @@ const AuthProvider: React.FC<{
     }
 
     const responsePayload = await response.json();
-    console.log(responsePayload.data);
 
     if (!responsePayload.success) {
       return false;
@@ -63,7 +68,7 @@ const AuthProvider: React.FC<{
 
     lsClient.setItem("IS_LOGGED_IN", true);
     lsClient.setItem("USER_INFO", responsePayload.data);
-
+    autoLogout((responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000);
     return true;
   };
 
@@ -94,7 +99,7 @@ const AuthProvider: React.FC<{
 
     lsClient.setItem("IS_LOGGED_IN", true);
     lsClient.setItem("USER_INFO", responsePayload.data);
-
+    autoLogout((responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000);
     return true;
   };
 
