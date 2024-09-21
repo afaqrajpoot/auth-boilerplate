@@ -63,7 +63,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} queried profile data
    */
   getByName(name: string): Promise<IProfile> {
-    return this.profileModel.findOne({ name }).exec();
+    return this.profileModel.findOne({ name }, { password: 0 }).exec();
   }
 
   /**
@@ -72,7 +72,7 @@ export class ProfileService {
    * @returns {Promise<IProfile>} queried profile data
    */
   getByEmail(email: string): Promise<IProfile> {
-    return this.profileModel.findOne({ email }).exec();
+    return this.profileModel.findOne({ email }, { password: 0 }).exec();
   }
 
   /**
@@ -104,7 +104,10 @@ export class ProfileService {
    */
   async edit(payload: PatchProfilePayload): Promise<IProfile> {
     const { email } = payload;
-    const updatedProfile = await this.profileModel.updateOne({ name }, payload);
+    const updatedProfile = await this.profileModel.updateOne(
+      { email },
+      payload,
+    );
     if (updatedProfile.modifiedCount !== 1) {
       throw new BadRequestException(
         "The profile with that name does not exist in the system. Please try another name.",
