@@ -30,18 +30,18 @@ export class ProfileController {
 
   /**
    * Retrieves a particular profile
-   * @param name the profile given name to fetch
+   * @param id the profile given id to fetch
    * @returns {Promise<IProfile>} queried profile data
    */
-  @Get(":name")
+  @Get(":id")
   @UseGuards(AuthGuard("jwt"))
   @ApiResponse({ status: 200, description: "Fetch Profile Request Received" })
   @ApiResponse({ status: 400, description: "Fetch Profile Request Failed" })
-  async getProfile(@Param("name") name: string): Promise<IProfile> {
-    const profile = await this.profileService.getByName(name);
+  async getProfile(@Param("id") id: string): Promise<IProfile> {
+    const profile = await this.profileService.getById(id);
     if (!profile) {
       throw new BadRequestException(
-        "The profile with that name could not be found.",
+        "The profile with that id could not be found.",
       );
     }
     return profile;
@@ -49,10 +49,11 @@ export class ProfileController {
 
   /**
    * Edit a profile
+   * @param id the profile given id to fetch and update
    * @param {RegisterPayload} payload
    * @returns {Promise<IProfile>} mutated profile data
    */
-  @Patch()
+  @Patch(":id")
   @UseGuards(AuthGuard("jwt"))
   @UseRoles({
     resource: "profiles",
@@ -61,16 +62,19 @@ export class ProfileController {
   })
   @ApiResponse({ status: 200, description: "Patch Profile Request Received" })
   @ApiResponse({ status: 400, description: "Patch Profile Request Failed" })
-  async patchProfile(@Body() payload: PatchProfilePayload) {
-    return await this.profileService.edit(payload);
+  async patchProfile(
+    @Body() payload: PatchProfilePayload,
+    @Param("id") id: string,
+  ) {
+    return await this.profileService.edit(id, payload);
   }
 
   /**
    * Removes a profile from the database
-   * @param {string} name the name to remove
+   * @param {string} id the id of record to remove
    * @returns {Promise<IGenericMessageBody>} whether or not the profile has been deleted
    */
-  @Delete(":name")
+  @Delete(":id")
   @UseGuards(AuthGuard("jwt"), ACGuard)
   @UseRoles({
     resource: "profiles",
@@ -79,7 +83,7 @@ export class ProfileController {
   })
   @ApiResponse({ status: 200, description: "Delete Profile Request Received" })
   @ApiResponse({ status: 400, description: "Delete Profile Request Failed" })
-  async delete(@Param("name") name: string): Promise<IGenericMessageBody> {
-    return await this.profileService.delete(name);
+  async delete(@Param("id") id: string): Promise<IGenericMessageBody> {
+    return await this.profileService.delete(id);
   }
 }

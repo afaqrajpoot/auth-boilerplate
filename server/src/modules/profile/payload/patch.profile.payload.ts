@@ -3,8 +3,8 @@ import {
   IsEmail,
   IsNotEmpty,
   MinLength,
-  IsAlphanumeric,
   Matches,
+  IsOptional,
 } from "class-validator";
 
 /**
@@ -14,24 +14,39 @@ export class PatchProfilePayload {
   /**
    * Email field
    */
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
+  @IsOptional()
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
   /**
    * Name field
    */
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
+  @IsOptional()
   @Matches(/^[a-zA-Z ]+$/)
-  @IsNotEmpty()
   name: string;
 
   /**
    * Password field
    */
-  @ApiProperty()
-  @IsNotEmpty()
-  @MinLength(8)
+  @ApiProperty({
+    required: false,
+  })
+  @IsOptional()
+  @MinLength(8, { message: "Password must be at least 8 characters long." })
+  @Matches(/[a-zA-Z]/, {
+    message: "Password must contain at least one letter.",
+  })
+  @Matches(/\d/, {
+    message: "Password must contain at least one number.",
+  })
+  @Matches(/[\W_]/, {
+    message: "Password must contain at least one special character.",
+  })
   password: string;
 }

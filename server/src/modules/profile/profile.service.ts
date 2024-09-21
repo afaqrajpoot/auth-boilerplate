@@ -49,7 +49,7 @@ export class ProfileService {
    * @param {string} password
    * @returns {Promise<IProfile>} queried profile data
    */
-  getByUseremailAndPass(email: string, password: string): Promise<IProfile> {
+  getByUserEmailAndPass(email: string, password: string): Promise<IProfile> {
     return this.profileModel
       .findOne({
         email,
@@ -58,16 +58,16 @@ export class ProfileService {
       .exec();
   }
   /**
-   * Fetches a profile from database by name
-   * @param {string} name
+   * Fetches a profile from database by id
+   * @param {string} id
    * @returns {Promise<IProfile>} queried profile data
    */
-  getByName(name: string): Promise<IProfile> {
-    return this.profileModel.findOne({ name }).exec();
+  getById(id: string): Promise<IProfile> {
+    return this.profileModel.findById(id).exec();
   }
 
   /**
-   * Fetches a profile from database by name
+   * Fetches a profile from database by email
    * @param {string} email
    * @returns {Promise<IProfile>} queried profile data
    */
@@ -99,35 +99,39 @@ export class ProfileService {
 
   /**
    * Edit profile data
+   * @param {string} id
    * @param {PatchProfilePayload} payload
    * @returns {Promise<IProfile>} mutated profile data
    */
-  async edit(payload: PatchProfilePayload): Promise<IProfile> {
-    const { email } = payload;
-    const updatedProfile = await this.profileModel.updateOne(
-      { email },
+  async edit(id: string, payload: PatchProfilePayload): Promise<IProfile> {
+    const updatedProfile = await this.profileModel.findByIdAndUpdate(
+      id,
       payload,
     );
-    if (updatedProfile.modifiedCount !== 1) {
-      throw new BadRequestException(
-        "The profile with that name does not exist in the system. Please try another name.",
-      );
-    }
-    return this.getByEmail(email);
+    updatedProfile
+      .save()
+      .then()
+      .catch(() => {
+        throw new BadRequestException(
+          "The profile with that id does not exist in the system. Please try another id.",
+        );
+      });
+
+    return this.getById(id);
   }
 
   /**
-   * Delete profile given a name
-   * @param {string} name
+   * Delete profile given a id
+   * @param {string} id
    * @returns {Promise<IGenericMessageBody>} whether or not the crud operation was completed
    */
-  delete(name: string): Promise<IGenericMessageBody> {
-    return this.profileModel.deleteOne({ name }).then((profile) => {
+  delete(id: string): Promise<IGenericMessageBody> {
+    return this.profileModel.deleteOne({ id }).then((profile) => {
       if (profile.deletedCount === 1) {
-        return { message: `Deleted ${name} from records` };
+        return { message: `Deleted ${id} from records` };
       } else {
         throw new BadRequestException(
-          `Failed to delete a profile by the name of ${name}.`,
+          `Failed to delete a profile by the Id of ${id}.`,
         );
       }
     });
