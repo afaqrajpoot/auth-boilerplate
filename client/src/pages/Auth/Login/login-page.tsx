@@ -28,7 +28,6 @@ export default function LoginPage() {
   const { login } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const methods = useForm<postLoginReqType>({
     defaultValues,
@@ -47,12 +46,10 @@ export default function LoginPage() {
     login(values)
       .then((res) => {
         if (!res) {
-          setIsError(true);
           return;
         }
         <Navigate to={PAGE_ROUTES.HOME} />;
       })
-      .catch(() => setIsError(true))
       .finally(() => setIsLoading(false));
   };
 
@@ -65,11 +62,6 @@ export default function LoginPage() {
             <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
               Enter your email below to login to your account. <br />
-              {isError && (
-                <span className="text-red-500 text-sm">
-                  {"Incorrect email or password"}
-                </span>
-              )}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">

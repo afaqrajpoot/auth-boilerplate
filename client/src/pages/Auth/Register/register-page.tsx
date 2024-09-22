@@ -30,8 +30,6 @@ export default function RegisterPage() {
   const { register: handleRegister } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("Something went wrong!");
 
   const methods = useForm<postRegisterReqType>({
     defaultValues,
@@ -50,15 +48,12 @@ export default function RegisterPage() {
     handleRegister(values)
       .then((res) => {
         if (!res) {
-          setIsError(true);
           setIsLoading(false);
-          setErrorMessage("Unable to register. Please try again.");
           return;
         }
         <Navigate to={PAGE_ROUTES.AUTH.LOGIN} />;
       })
       .catch(() => {
-        setIsError(true);
         setIsLoading(false);
       });
   };
@@ -72,9 +67,6 @@ export default function RegisterPage() {
             <CardTitle className="text-2xl">Register</CardTitle>
             <CardDescription>
               Enter your email below to register your account. <br />
-              {isError && (
-                <span className="text-red-500 text-sm">{errorMessage}</span>
-              )}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">

@@ -2,6 +2,7 @@
 
 import { localStorageClient } from "@/config";
 import { ENV } from "@/constants";
+import useLocalToast from "@/hooks/useToast";
 import {
   postLoginReqType,
   postLoginResType,
@@ -27,6 +28,8 @@ const AuthContext = createContext<{
 const AuthProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
+  const { callToast } = useLocalToast();
+
   const lsClient = localStorageClient();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -53,12 +56,21 @@ const AuthProvider: React.FC<{
     );
 
     if (!response.ok) {
+      const formattedError = await response.json();
+      callToast({
+        toastMessage: formattedError.message || "Something went wrong !",
+        toastType: "error",
+      });
       return false;
     }
 
     const responsePayload = await response.json();
 
     if (!responsePayload.success) {
+      callToast({
+        toastMessage: responsePayload.message || "Something went wrong !",
+        toastType: "error",
+      });
       return false;
     }
 
@@ -72,6 +84,11 @@ const AuthProvider: React.FC<{
     autoLogout(
       parseInt(responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000
     );
+
+    callToast({
+      toastMessage: "Logged-in successfully.",
+      toastType: "success",
+    });
     return true;
   };
 
@@ -89,11 +106,21 @@ const AuthProvider: React.FC<{
     );
 
     if (!response.ok) {
+      const formattedError = await response.json();
+
+      callToast({
+        toastMessage: formattedError.message || "Something went wrong !",
+        toastType: "error",
+      });
       return false;
     }
 
     const responsePayload = await response.json();
     if (!responsePayload.success) {
+      callToast({
+        toastMessage: responsePayload.message || "Something went wrong !",
+        toastType: "error",
+      });
       return false;
     }
 
@@ -105,6 +132,10 @@ const AuthProvider: React.FC<{
     autoLogout(
       parseInt(responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000
     );
+    callToast({
+      toastMessage: "Account created successfully.",
+      toastType: "success",
+    });
     return true;
   };
 
@@ -112,6 +143,10 @@ const AuthProvider: React.FC<{
     lsClient.cleanStorage();
     setIsLoggedIn(false);
     setUserInfo(undefined);
+    callToast({
+      toastMessage: "Logout successfully.",
+      toastType: "info",
+    });
   };
 
   // restore state from local storage

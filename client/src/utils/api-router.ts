@@ -55,8 +55,6 @@ export const apiRouter = async <T extends keyof typeof API_TYPE_MAPPER>(
 
   // handle 401 error
   if (response.status === 401) {
-    console.log("Unauthorized");
-
     localStorage.clear();
   }
 
