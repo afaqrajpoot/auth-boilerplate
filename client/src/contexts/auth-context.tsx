@@ -68,7 +68,10 @@ const AuthProvider: React.FC<{
 
     lsClient.setItem("IS_LOGGED_IN", true);
     lsClient.setItem("USER_INFO", responsePayload.data);
-    autoLogout((responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000);
+
+    autoLogout(
+      parseInt(responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000
+    );
     return true;
   };
 
@@ -99,7 +102,9 @@ const AuthProvider: React.FC<{
 
     lsClient.setItem("IS_LOGGED_IN", true);
     lsClient.setItem("USER_INFO", responsePayload.data);
-    autoLogout((responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000);
+    autoLogout(
+      parseInt(responsePayload.data?.expires || ENV.TOKEN_EXPIRES_IN) * 1000
+    );
     return true;
   };
 

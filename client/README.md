@@ -29,17 +29,27 @@ npm run dev
 ## Project Structure
 
 ```
-react-shadcn-starter/
-├── public/            # Public assets
-├── src/               # Application source code
-│   ├── components/    # React components
-│   │   └── ui/        # shadc/ui components
-│   │   └── layouts/   # layouts components
-│   ├── context/       # contexts components
-│   ├── config/        # Config data
-│   ├── hook/          # Custom hooks
-│   ├── lib/           # Utility functions
-│   ├── pages/         # pages/features components
+react-auth-boilerplate/
+├───public
+└───src
+│   ├───components    # React components
+│   │   ├───layouts   # layouts components
+│   │   └───ui        # shadcn/ui components
+│   │       └───common
+│   ├───config        # Config data
+│   ├───constants     # Constant Data
+│   ├───contexts      # contexts components
+│   ├───hooks         # Custom hooks
+│   ├───pages         # pages/features components
+│   │   ├───Auth
+│   │   │   ├───login
+│   │   │   └───register
+│   │   ├───dashboard
+│   │   └───no-match
+│   ├───schemas        # Form Schemas
+│   │   └───auth       # auth Schemas
+│   ├───types          # Custom types
+│   └───utils          # Utility functions
 │   ├── App.tsx        # Application entry point
 │   ├── index.tsx      # Main rendering file
 │   └── Router.tsx     # Routes component
@@ -47,5 +57,14 @@ react-shadcn-starter/
 ├── postcss.config.js  # PostCSS configuration
 ├── tailwind.config.js # Tailwind CSS configuration
 ├── tsconfig.json      # TypeScript configuration
-└── vite.config.ts     # Vite configuration
+├── vite.config.ts     # Vite configuration
+├── .env.example       # example env format
+├── .gitignore         # gitignore file
+├── components.json    # shadcn components json
+├── eslint.config.js   # eslint configuration
+├── package-lock.json  # lock file 
+├── package.json       # Package json
+├── README.md          # Readme itself
+├── tsconfig.json      # ts compiler configuration
+└── tsconfig.node.json # ts node config
 ```
