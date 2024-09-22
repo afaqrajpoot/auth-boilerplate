@@ -82,6 +82,21 @@ describe("AppController (e2e)", () => {
       });
   });
 
+  it("/api/auth/login (POST) validate password contains at least one letter", () => {
+    return request(app.getHttpServer())
+      .post("/api/auth/login")
+      .send({
+        email: "test@gmail.com",
+        password: "@12345678",
+      })
+      .expect(400)
+      .expect({
+        statusCode: 400,
+        error: "Bad Request",
+        message: ["Password must contain at least one letter."],
+      });
+  });
+
   it("/api/auth/login (POST) try to login with unregistered account", () => {
     return request(app.getHttpServer())
       .post("/api/auth/login")
